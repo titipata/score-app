@@ -12,22 +12,23 @@ anno_texts = ["Result"]
 
 
 def display_result(result: list, c: str = "#8ef"):
+    """Display annotated output from a given list of predictions"""
     anno_texts = []
     for r in result:
         sent = r["sent"]
         claim_score = r["result"][1]["score"]
         if claim_score < 0.5:
             anno_texts.append(sent)
-            continue
-        anno_texts.append(
-            (sent, "CLAIM {}%".format(round(claim_score * 100, 2)), "#8ef")
-        )
-    # print(anno_texts)
+        else:
+            anno_texts.append(
+                (sent, "CLAIM {}%".format(round(claim_score * 100, 2)), c)
+            )
     st.markdown("** Result: **")
     annotated_text(*anno_texts)
 
 
 def parse_pdf(pdf_content):
+    """Parse PDF content and return a list of sentences"""
     try:
         parsed_article = scipdf.parse_pdf_to_dict(
             pdf_content, grobid_url="https://cloud.science-miner.com/grobid/"
@@ -75,10 +76,12 @@ def main():
     color_map = {"claim2": "#eab676", "claim3a": "#abdbe3", "claim3b": "#f9c8c8"}
     c = color_map.get(model_selected, "#eab676")
     st.title("SCORE Claim Extraction")
-    st.write("""Extract claims from scientific articles with SCORE dataset.""")
+    st.write(
+        """Extract claims from scientific articles using the model trained on SCORE dataset."""
+    )
 
     # Content
-    uploaded_file = st.file_uploader("Upload scholarly PDF file")
+    uploaded_file = st.file_uploader("Upload scholarly PDF file below...", type="pdf")
 
     if uploaded_file is not None:
         bytes_data = uploaded_file.getvalue()
@@ -106,9 +109,10 @@ def main():
     btn = st.button("Predict")
     if btn:
         predictor = load_predictor()
-        # print("Model: {}".format(model_selected.lower()))
         result = predictor.predict(model_selected, text)
-        # print(json.dumps(result, indent=2))
+        # printing prediction result
+        print("Model: {}".format(model_selected.lower()))
+        print(json.dumps(result, indent=2))
         display_result(result, c)
 
 
