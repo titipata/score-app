@@ -76,8 +76,12 @@ def main():
     color_map = {"claim2": "#eab676", "claim3a": "#abdbe3", "claim3b": "#f9c8c8"}
     c = color_map.get(model_selected, "#eab676")
     st.title("SCORE Claim Extraction")
-    st.write(
-        """Extract claims from scientific articles using the model trained on SCORE dataset."""
+    st.markdown(
+        """Extract claims from scientific articles using the model trained on SCORE dataset. 
+        Select a model to extract claims on the configuration bar.
+        Then, you can paste the content of a PDF file in the text area and run the prediction.
+        Alternatively, you can upload a scholarly PDF article to parse the content then copy the content into the text area.
+        """
     )
 
     # Content
@@ -98,12 +102,11 @@ def main():
             if i >= 5:
                 break
 
-            md = """##### Type: {} Title: {}""".format(
-                pdf_content["type"], pdf_content["title"]
-            )
-            st.markdown(md)
-            st.code(pdf_content["text"])
-            st.markdown("-----")
+            ptitle = pdf_content["title"] if pdf_content["title"] else "No title"
+            if len(pdf_content["text"].strip()) > 0:
+                st.markdown(f"**{ptitle} (type: {pdf_content['type']})**")
+                st.code(pdf_content["text"])
+                st.markdown("-----")
 
     text = st.text_area("Enter a paragraph below", "", height=250)
     btn = st.button("Predict")
