@@ -3,6 +3,7 @@ from transformers import pipeline
 import os
 import spacy
 
+
 class SCOREPredictor:
     def __init__(self) -> None:
 
@@ -20,7 +21,9 @@ class SCOREPredictor:
         for model_name, item in self.MODEL_DICT.items():
 
             print(f"Loading model: {model_name}")
-            self.CLASSIFIERS[model_name] = pipeline("text-classification", model=item["path"])
+            self.CLASSIFIERS[model_name] = pipeline(
+                "text-classification", model=item["path"]
+            )
 
     def paragraph_to_sentences(self, paragraph: str):
 
