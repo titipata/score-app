@@ -39,9 +39,6 @@ class SCOREPredictor:
         assert (
             model_name in self.CLASSIFIERS.keys()
         ), "A given model is not found in list of classifier."
-        assert (
-            len(self.CLASSIFIERS) == 0
-        ), "You have not downloaded the model yet. Please run `load_model` first."
         classifier = self.CLASSIFIERS.get(model_name, None)
         if classifier is None:
             raise Exception("Invalid model")

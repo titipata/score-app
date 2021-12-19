@@ -67,7 +67,7 @@ def parse_pdf(pdf_content):
 
 
 def main():
-    # Side bar
+    # Side bar and application header
     st.sidebar.markdown(f"## Configuration")
     model_selected = st.sidebar.selectbox(
         "Select Model", ("CLAIM2", "CLAIM3A", "CLAIM3B")
@@ -84,7 +84,7 @@ def main():
         """
     )
 
-    # Content
+    # PDF Parser
     uploaded_file = st.file_uploader("Upload scholarly PDF file below...", type="pdf")
 
     if uploaded_file is not None:
@@ -108,6 +108,7 @@ def main():
                 st.code(pdf_content["text"])
                 st.markdown("-----")
 
+    # claim predictor
     text = st.text_area("Enter a paragraph below", "", height=250)
     btn = st.button("Predict")
     if btn:
